@@ -1,3 +1,0 @@
-we r working with you and others on Agents Guide - a doc of how to translate a free from wish into a formal schema of a  data driven app. I'm gonna attach about a dozen parts - for context - (Chapters 1- 7 are not finished - but you have an idea how to proceed).
-Till today this doc was an instruction of how to formalize an app DB schema-skeleton. Today we added functionality of incorporating themes, scripts and help system into that skeleton.
-Can you try finish the document? Ready for upload? I'll tell you when you have all the parts uploaded, OK?
