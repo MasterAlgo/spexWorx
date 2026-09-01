@@ -101,14 +101,8 @@ The backend is raw Java with an embedded H2 database. No Spring, no Node, no Doc
 
 ## Documentation
 
-| Document | Description |
-| :--- | :--- |
-| [`docs/project_memo.md`](docs/project_memo.md) | Full architecture, domain roles, and development state |
-| [`docs/component_creation_guide.md`](docs/component_creation_guide.md) | How to build and register new SpexWorx components |
-| [`docs/stress_test_app_schema.xml`](docs/stress_test_app_schema.xml) | Complete AppML schema with menus, tables, themes, and stress-test scripts |
-| [`docs/assets/game_development_manual.md`](docs/assets/game_development_manual.md) | Building real-time games inside ScriptBoxes |
-| [`docs/database_schema.md`](docs/database_schema.md) | Database tables and column specifications |
-
+Coming soon
+https://youtu.be/68sF-4wijSs
 ---
 
 ## License
