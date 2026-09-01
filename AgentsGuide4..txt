@@ -1,0 +1,5161 @@
+SpexWorx Agents Guide v4.0
+
+Compiling Human Intent into Navigable Information Systems
+
+Working Draft
+
+Preface
+
+Every software platform carries an implicit philosophy.
+
+Some believe software begins with databases.
+
+Some begin with objects.
+
+Others begin with web pages, REST APIs, components, or services.
+
+SpexWorx begins somewhere else.
+
+It begins with human intent.
+
+A human rarely thinks in terms of tables, foreign keys, indexes or REST endpoints.
+
+Instead they say things like:
+
+"I'd like to organize my music."
+
+"I need something to manage our veterinary clinic."
+
+"Can I keep research papers together with my notes?"
+
+These wishes already contain the architecture.
+
+The challenge is discovering it.
+
+This guide describes how a coding agent—or a human architect—transprets a free-form wish into a navigable information system.
+
+The purpose of the guide is not to explain AppML syntax.
+
+The purpose is to teach architectural reasoning.
+
+AppML is merely the language used to express the final result.
+
+Chapter 1
+The SpexWorx Philosophy
+1.1 Software is an Information Space
+
+Traditional software often treats an application as a collection of forms.
+
+Login
+
+↓
+
+Customers
+
+↓
+
+Edit Form
+
+↓
+
+Save
+
+SpexWorx treats an application differently.
+
+An application is an information space.
+
+Users move through information.
+
+Navigation becomes the primary activity.
+
+Editing becomes secondary.
+
+Imagine entering a museum.
+
+Nobody begins by asking
+
+"Where is the database?"
+
+Instead they ask
+
+"Where should I go first?"
+
+Applications are no different.
+
+Good applications answer
+
+"Where do I go next?"
+
+rather than merely
+
+"What fields should I edit?"
+
+Navigation therefore becomes a first-class architectural concept.
+
+1.2 Persistent Objects
+
+Everything meaningful inside an application eventually becomes a persistent object.
+
+Examples
+
+Patient
+
+Customer
+
+Invoice
+
+Book
+
+Photo
+
+Album
+
+Recipe
+
+Project
+
+Experiment
+
+Persistent objects have identity.
+
+They survive application restarts.
+
+They can participate in relationships.
+
+They can contain rich media.
+
+They can accumulate history.
+
+Transient concepts usually do not become persistent objects.
+
+Examples
+
+Search results
+
+Clipboard
+
+Import session
+
+Wizard page
+
+Temporary filter
+
+These exist only while the application is running.
+
+1.3 Ownership
+
+One of the most important architectural questions is
+
+Who owns this object?
+
+Ownership determines navigation.
+
+Ownership determines hierarchy.
+
+Ownership often determines lifecycle.
+
+Example
+
+Customer
+
+↓
+
+Orders
+
+↓
+
+Order Items
+
+Deleting a customer may eventually remove every order.
+
+Deleting an order removes its items.
+
+Ownership therefore forms a hierarchy.
+
+Contrast this with
+
+Order
+
+→ Product
+
+→ Employee
+
+→ Warehouse
+
+Products are not owned by Orders.
+
+Employees are not owned by Orders.
+
+Warehouses are not owned by Orders.
+
+These are references.
+
+Ownership and reference must never be confused.
+
+1.4 Navigation before CRUD
+
+CRUD is important.
+
+Navigation is more important.
+
+A CRUD-oriented system asks
+
+How can users edit records?
+
+SpexWorx asks
+
+How do users naturally discover information?
+
+These questions produce different architectures.
+
+Example.
+
+Suppose someone owns ten thousand photographs.
+
+CRUD thinking produces
+
+Photo table
+
+Edit
+
+Delete
+
+Insert
+
+Navigation thinking produces
+
+People
+
+↓
+
+Trips
+
+↓
+
+Locations
+
+↓
+
+Photos
+
+↓
+
+Camera
+
+↓
+
+Lens
+
+Finding becomes more valuable than editing.
+
+1.5 Information is Multi-dimensional
+
+Folders assume every object belongs to one place.
+
+Reality rarely behaves this way.
+
+A song may simultaneously belong to
+
+Artist
+
+Album
+
+Genre
+
+Producer
+
+Studio
+
+Mood
+
+Playlist
+
+Language
+
+Year
+
+Which one is its real location?
+
+All of them.
+
+Therefore folders become insufficient.
+
+SpexWorx models dimensions independently.
+
+Relationships become navigation paths.
+
+1.6 Rich Objects
+
+Modern information rarely consists of text alone.
+
+A single object may include
+
+Description
+
+Image
+
+PDF
+
+Audio
+
+Voice recording
+
+Video
+
+Collaborative notes
+
+SpexWorx therefore treats media as part of the object itself rather than external attachments.
+
+Media is not an afterthought.
+
+Media participates naturally in navigation.
+
+1.7 Backend by UI
+
+Most frameworks begin with backend code.
+
+Then APIs.
+
+Then UI.
+
+SpexWorx deliberately reverses this process.
+
+The developer first models the information space.
+
+The runtime derives persistence, navigation and interaction directly from that model.
+
+The UI therefore becomes a declarative description of the application rather than a thin layer over handwritten backend code.
+
+This approach does not eliminate programming.
+
+Instead it moves programming toward behavior rather than infrastructure.
+
+1.8 Human Wishes Already Contain Architecture
+
+Suppose somebody says
+
+"I keep forgetting where I stored my music."
+
+No mention of
+
+Database
+
+SQL
+
+REST
+
+JSON
+
+Primary Keys
+
+Yet an experienced architect immediately hears
+
+Media
+
+Artists
+
+Albums
+
+Genres
+
+People
+
+Studios
+
+Relationships
+
+Architecture is already present.
+
+It simply has not yet been expressed formally.
+
+The purpose of SpexWorx compilation is to discover that hidden structure.
+
+1.9 The Role of AppML
+
+AppML is not the application.
+
+It is not the database.
+
+It is not the runtime.
+
+AppML is an Intermediate Representation (IR).
+
+Human Wish
+
+↓
+
+Architectural Reasoning
+
+↓
+
+Domain Model
+
+↓
+
+Navigation Graph
+
+↓
+
+AppML
+
+↓
+
+Runtime
+
+↓
+
+Running Application
+
+AppML exists because both humans and runtimes benefit from an explicit architectural description.
+
+It separates reasoning from execution.
+
+1.10 The Prime Directive
+
+Every decision made by the compiler must satisfy one principle:
+
+Represent the user's world as naturally as possible.
+
+Not the programmer's world.
+
+Not the database's world.
+
+Not SQL's world.
+
+Not XML's world.
+
+The user's world.
+
+If the generated navigation feels obvious to someone familiar with the domain, the compilation has succeeded.
+
+If users constantly ask
+
+"Where do I find that?"
+
+the architecture should be reconsidered before adding more features.
+
+End of Chapter 1
+
+Next Chapter
+
+Chapter 2 — The Compilation Process: From Wish to Information Architecture
+
+(We'll begin defining the actual "compiler" that transforms natural language into AppML.)
+
+Chapter 2
+The Compilation Process
+2.1 Introduction
+
+SpexWorx applications are compiled, not assembled.
+
+Compilation does not begin with XML.
+
+It begins with understanding.
+
+A coding agent should never ask
+
+"Which component should I generate first?"
+
+Instead it should ask
+
+"What world is the user describing?"
+
+Only after that world has been discovered can AppML be produced.
+
+2.2 The Compiler Pipeline
+
+Every application follows exactly the same pipeline.
+
+Human Wish
+      │
+      ▼
+Intent Analysis
+      │
+      ▼
+Domain Discovery
+      │
+      ▼
+Persistent Object Extraction
+      │
+      ▼
+Ownership Graph
+      │
+      ▼
+Reference Graph
+      │
+      ▼
+Navigation Graph
+      │
+      ▼
+Component Selection
+      │
+      ▼
+AppML
+      │
+      ▼
+Runtime Application
+
+Each stage transforms information into a more formal representation.
+
+The compiler must never skip stages.
+
+2.3 Stage 1 — Intent Analysis
+
+Human wishes are intentionally imprecise.
+
+Example:
+
+"I'd like to organize all my music and remember interesting facts about songs."
+
+A poor compiler hears
+
+Music
+
+A good compiler hears
+
+collect
+
+browse
+
+remember
+
+search
+
+annotate
+
+discover
+
+
+Those verbs describe behavior.
+
+Behavior drives architecture.
+
+Intent analysis identifies
+
+goals
+users
+expected workflows
+navigation expectations
+persistence expectations
+
+without thinking about XML.
+
+Example
+
+Wish
+
+"I need software for my veterinary clinic."
+
+Compiler notes
+
+Users
+
+Receptionists
+
+Veterinarians
+
+Owners
+
+
+Goals
+
+Schedule visits
+
+Record treatments
+
+Issue invoices
+
+Browse medical history
+
+No tables yet.
+
+2.4 Stage 2 — Domain Discovery
+
+Now the compiler asks
+
+What objects exist?
+
+Not
+
+What tables?
+
+Objects.
+
+Example
+
+Veterinary clinic
+
+Clinic
+
+Owners
+
+Pets
+
+Visits
+
+Vaccinations
+
+Invoices
+
+Doctors
+
+Medicines
+
+Music archive
+
+Artists
+
+Albums
+
+Media
+
+Genres
+
+Studios
+
+People
+
+Playlists
+
+Moods
+
+Research library
+
+Authors
+
+Papers
+
+Keywords
+
+Projects
+
+Experiments
+
+Institutions
+
+The compiler should continue asking
+
+"What else exists?"
+
+until no important concepts remain.
+
+2.5 Stage 3 — Persistent Object Extraction
+
+Not every noun deserves persistence.
+
+Example
+
+Wish
+
+"Search songs by mood."
+
+Mood persists.
+
+Search does not.
+
+Wish
+
+"Import music from my NAS."
+
+Music persists.
+
+Import session does not.
+
+Compiler rule
+
+Persist things.
+
+Do not persist actions.
+
+
+Examples
+
+Persist
+
+Song
+
+Photo
+
+Invoice
+
+Experiment
+
+Recipe
+
+Patient
+
+Transient
+
+Login
+
+Import
+
+Search
+
+Clipboard
+
+Export
+
+Wizard
+2.6 Stage 4 — Ownership Discovery
+
+This is the first architectural decision.
+
+Ask
+
+Can this object exist without another object?
+
+If NO
+
+ownership probably exists.
+
+Example
+
+Customer
+
+↓
+
+Orders
+
+↓
+
+Items
+
+Items have no meaning without Orders.
+
+Orders usually have no meaning without Customers.
+
+Hierarchy.
+
+Example
+
+Artist
+
+↓
+
+Albums
+
+Albums naturally belong to Artists.
+
+Ownership normally implies
+
+navigation
+lifecycle
+parent-child browsing
+
+Compiler heuristic
+
+Children inherit context.
+
+References do not.
+
+2.7 Stage 5 — Reference Discovery
+
+Ask
+
+Which objects merely describe another object?
+
+Example
+
+Song
+
+Genre
+
+Producer
+
+Studio
+
+Mood
+
+Language
+
+None are owned by Song.
+
+None disappear when Song disappears.
+
+Therefore
+
+references.
+
+Example
+
+Visit
+
+Doctor
+
+Room
+
+Pet
+
+Treatment
+
+Invoice
+
+Again
+
+references.
+
+Compiler rule
+
+Ownership answers
+
+inside what?
+
+Reference answers
+
+related to what?
+
+Never confuse them.
+
+2.8 Stage 6 — Navigation Discovery
+
+Only now ask
+
+How will humans browse?
+
+People rarely browse databases.
+
+They browse stories.
+
+Examples
+
+Music
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Song
+
+Clinic
+
+Owner
+
+↓
+
+Pet
+
+↓
+
+Visit
+
+Research
+
+Project
+
+↓
+
+Experiment
+
+↓
+
+Observation
+
+Navigation should feel obvious.
+
+If explanation is required,
+
+the architecture is probably wrong.
+
+2.9 Stage 7 — Component Selection
+
+Architecture now exists.
+
+Only now choose components.
+
+Rules
+
+Persistent object
+
+↓
+
+Table
+
+Owned object
+
+↓
+
+table-1fk
+
+Independent relationships
+
+↓
+
+table-multi-fk
+
+Entry point
+
+↓
+
+Menu
+
+Rich notes
+
+↓
+
+text_box
+
+Collaborative notes
+
+↓
+
+coop_box
+
+Rich content
+
+↓
+
+media_box
+
+Notice
+
+Component selection is almost mechanical.
+
+Good architecture makes XML easy.
+
+Poor architecture makes XML complicated.
+
+2.10 Stage 8 — AppML Generation
+
+Only after all previous stages are complete should XML appear.
+
+The compiler is no longer designing.
+
+It is documenting.
+
+Architecture should already be finished.
+
+AppML merely records it.
+
+2.11 Stage 9 — Runtime Compilation
+
+The runtime receives AppML.
+
+It creates
+
+Persistent storage
+
+Navigation
+
+Editors
+
+Relationships
+
+Media support
+
+Collaboration
+
+Themes
+
+Scripts
+
+Runtime synchronization
+
+No architectural decisions should occur here.
+
+Those belong to the compiler.
+
+2.12 Confidence Loop
+
+Before producing AppML the compiler performs one final review.
+
+Ask:
+
+Did I discover all important persistent objects?
+
+YES / NO
+
+Is every hierarchy true ownership?
+
+YES / NO
+
+Are lookup tables independent?
+
+YES / NO
+
+Does every navigation path feel natural?
+
+YES / NO
+
+Would a domain expert immediately understand this structure?
+
+YES / NO
+
+If any answer is
+
+NO
+
+return to Domain Discovery.
+
+Never compensate for weak architecture with additional scripting.
+
+2.13 Example
+
+Wish
+
+"I want to organize my vinyl collection."
+
+Compiler
+
+Intent
+
+Collect
+
+Browse
+
+Search
+
+Annotate
+
+Objects
+
+Artists
+
+Albums
+
+Media
+
+Genres
+
+People
+
+Years
+
+Ownership
+
+Artist
+
+↓
+
+Album
+
+Reference
+
+Media
+
+→ Genre
+
+→ Producer
+
+→ Studio
+
+→ Year
+
+Navigation
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Media
+
+Components
+
+Menu
+
+table-1fk
+
+table-multi-fk
+
+media_box
+
+text_box
+
+Result
+
+Generate AppML.
+
+2.14 Compiler Principle
+
+A compiler must never ask
+
+"How do I represent this in XML?"
+
+Its job is to ask
+
+"What information architecture best represents the user's world?"
+
+Only when that question has been answered should AppML be emitted.
+
+End of Chapter 2
+
+
+Chapter 3
+Architectural Reasoning
+
+"Architecture is the art of discovering structure that already exists within the user's world."
+
+3.1 Introduction
+
+A human describes stories.
+
+An architect discovers structure.
+
+A compiler translates that structure into AppML.
+
+This chapter teaches the compiler how to discover architecture.
+
+Not XML.
+
+Not components.
+
+Architecture.
+
+3.2 Every Domain Already Has Structure
+
+Consider these wishes.
+
+I collect butterflies.
+
+I run a veterinary clinic.
+
+I restore classic cars.
+
+I catalog my vinyl records.
+
+At first glance these seem unrelated.
+
+An experienced architect immediately notices something.
+
+Every domain consists of
+
+things
+people
+events
+relationships
+
+The vocabulary changes.
+
+The architecture rarely does.
+
+3.3 The Five Questions
+
+Every application begins with exactly five questions.
+
+Question 1
+What persists?
+
+Persistent objects become candidates for tables.
+
+Example
+
+Photography
+
+Photos
+
+Trips
+
+Locations
+
+Cameras
+
+Lenses
+
+People
+
+Clinic
+
+Owners
+
+Pets
+
+Doctors
+
+Visits
+
+Invoices
+
+Music
+
+Artists
+
+Albums
+
+Media
+
+Genres
+
+People
+
+Studios
+
+Question two.
+
+Question 2
+What owns what?
+
+Ownership creates hierarchy.
+
+Example
+
+Owner
+
+↓
+
+Pet
+
+↓
+
+Visit
+
+Example
+
+Artist
+
+↓
+
+Album
+
+Compiler rule
+
+Ownership always answers
+
+Inside what?
+
+Question three.
+
+Question 3
+What merely describes?
+
+Descriptions become references.
+
+Example
+
+Song
+
+Genre
+
+Mood
+
+Language
+
+Producer
+
+Year
+
+None own the Song.
+
+None belong inside the Song.
+
+They describe it.
+
+Question four.
+
+Question 4
+How will humans browse?
+
+This question is more important than
+
+"What tables exist?"
+
+Suppose the compiler discovers
+
+Patients
+
+Doctors
+
+Treatments
+
+Rooms
+
+There are dozens of possible schemas.
+
+Humans however naturally think
+
+Owner
+
+↓
+
+Pet
+
+↓
+
+Visit
+
+not
+
+Room
+
+↓
+
+Doctor
+
+↓
+
+Visit
+
+Architecture should follow people,
+
+not databases.
+
+Question five.
+
+Question 5
+What deserves automation?
+
+Not everything needs scripting.
+
+Example
+
+Import photographs
+
+Generate thumbnails
+
+Rename albums
+
+Extract metadata
+
+Voice transcription
+
+These become scripts.
+
+Navigation never should.
+
+3.4 Canonical Objects
+
+Across hundreds of applications,
+
+the compiler repeatedly discovers the same kinds of objects.
+
+People
+
+Customer
+
+Doctor
+
+Employee
+
+Student
+
+Author
+
+Musician
+
+Containers
+
+Album
+
+Project
+
+Course
+
+Folder
+
+Experiment
+
+Trip
+
+Items
+
+Song
+
+Photo
+
+Recipe
+
+Task
+
+Book
+
+Observation
+
+Events
+
+Visit
+
+Purchase
+
+Performance
+
+Flight
+
+Meeting
+
+Experiment
+
+Documents
+
+Invoice
+
+PDF
+
+Contract
+
+Letter
+
+Report
+
+The names change.
+
+The role rarely changes.
+
+3.5 Canonical Relationships
+
+Ownership
+
+Customer
+
+↓
+
+Order
+
+Collection
+
+Album
+
+↓
+
+Song
+
+Timeline
+
+Project
+
+↓
+
+Milestone
+
+↓
+
+Task
+
+Reference Network
+
+Paper
+
+↓
+
+Keywords
+
+Authors
+
+Institution
+
+Journal
+
+Project
+
+Taxonomy
+
+Kingdom
+
+↓
+
+Phylum
+
+↓
+
+Class
+
+↓
+
+Order
+
+↓
+
+Family
+
+Media
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Media
+
+These patterns appear again and again.
+
+The compiler should recognize them.
+
+3.6 Architectural Inference
+
+This is where intelligence begins.
+
+Example.
+
+Human says
+
+"I photograph birds."
+
+Compiler thinks
+
+Birds persist.
+
+Photos persist.
+
+Trips persist.
+
+Locations persist.
+
+Species persist.
+
+Camera persists.
+
+Lens persists.
+
+Photographers persist.
+
+Now ask
+
+What owns what?
+
+Probably
+
+Trip
+
+↓
+
+Photos
+
+What describes?
+
+Species
+
+Camera
+
+Lens
+
+Location
+
+Weather
+
+Architecture appears naturally.
+
+Another.
+
+Human
+
+"I brew beer."
+
+Compiler
+
+Recipes
+
+Ingredients
+
+Batches
+
+Measurements
+
+Fermentation
+
+Equipment
+
+Ownership
+
+Recipe
+
+↓
+
+Batch
+
+Reference
+
+Ingredients
+
+Equipment
+
+Style
+
+Supplier
+
+Again,
+
+no XML.
+
+3.7 Anti-patterns
+
+The compiler must actively avoid poor architecture.
+
+Anti-pattern
+
+Everything becomes one table.
+
+Media
+
+Artist
+
+Album
+
+Genre
+
+Producer
+
+Mood
+
+Language
+
+Lyrics
+
+Cover
+
+Studio
+
+Publisher
+
+Country
+
+...
+
+This destroys navigation.
+
+Anti-pattern
+
+Everything becomes hierarchy.
+
+Genre
+
+↓
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Song
+
+Genres do not own artists.
+
+Anti-pattern
+
+Everything becomes lookup.
+
+Customer
+
+↓
+
+Lookup
+
+↓
+
+Lookup
+
+↓
+
+Lookup
+
+Nothing has ownership.
+
+Navigation disappears.
+
+Anti-pattern
+
+Automation replaces architecture.
+
+Never write a script because hierarchy is wrong.
+
+Fix the hierarchy.
+
+3.8 Confidence Levels
+
+Architects are not equally certain about every decision.
+
+The compiler should distinguish
+
+Certain
+
+Likely
+
+Unknown
+
+Example
+
+Wish
+
+I repair bicycles.
+
+Certain
+
+Customers
+
+Bicycles
+
+Repairs
+
+Likely
+
+Mechanics
+
+Invoices
+
+Parts
+
+Unknown
+
+Warranty
+
+Rental
+
+Inventory
+
+Generate only what is justified.
+
+Ask questions only when uncertainty changes architecture.
+
+3.9 The Architect's Internal Dialogue
+
+The compiler should continuously ask itself
+
+What exists?
+
+Who owns it?
+
+Who references it?
+
+How do humans browse?
+
+Can this disappear?
+
+Does this deserve persistence?
+
+What story is the user telling?
+
+Notice
+
+No XML.
+
+3.10 The Architect's Rule
+
+The compiler's objective is
+
+not
+
+to reproduce the user's words.
+
+Its objective is
+
+to discover the information architecture implied by those words.
+
+Those two things are rarely identical.
+
+3.11 The SpexWorx Test
+
+Suppose the XML disappeared.
+
+Could an architect reconstruct it
+
+simply by looking at
+
+the domain,
+the ownership graph,
+the navigation graph?
+
+If yes,
+
+the architecture is sound.
+
+If no,
+
+the XML is probably compensating for weak reasoning.
+
+End of Chapter 3
+(Author's note)
+
+
+Chapter 4
+Canonical Information Architectures
+
+"Most applications are variations of a surprisingly small number of architectural patterns."
+
+4.1 Introduction
+
+Beginning architects often believe every application is unique.
+
+Experienced architects know otherwise.
+
+Different domains frequently share identical structures.
+
+For example
+
+Hospital
+
+Patient
+
+↓
+
+Visit
+
+↓
+
+Treatment
+
+looks remarkably similar to
+
+University
+
+Student
+
+↓
+
+Course
+
+↓
+
+Assignment
+
+and
+
+Music
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Song
+
+Different vocabulary.
+
+Same architecture.
+
+The compiler should therefore recognize patterns instead of inventing schemas.
+
+4.2 Pattern 1 — Owner → Collection → Item
+
+The most common architecture.
+
+Owner
+
+↓
+
+Collection
+
+↓
+
+Item
+
+Examples
+
+Music
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Song
+
+Photography
+
+Trip
+
+↓
+
+Album
+
+↓
+
+Photo
+
+Recipes
+
+Cookbook
+
+↓
+
+Category
+
+↓
+
+Recipe
+
+Research
+
+Project
+
+↓
+
+Experiment
+
+↓
+
+Observation
+
+Whenever humans naturally say
+
+"inside"
+
+this pattern is a strong candidate.
+
+Characteristics
+
+Collections organize.
+
+Items carry detail.
+
+Navigation feels obvious.
+
+4.3 Pattern 2 — Owner → Transaction
+Owner
+
+↓
+
+Transaction
+
+Examples
+
+Customer
+
+↓
+
+Order
+
+Pet
+
+↓
+
+Visit
+
+Employee
+
+↓
+
+Expense
+
+Student
+
+↓
+
+Enrollment
+
+Transactions record events.
+
+They usually accumulate.
+
+They rarely move.
+
+4.4 Pattern 3 — Transaction → Detail
+
+Transactions often own detail records.
+
+Invoice
+
+↓
+
+Line Items
+
+Experiment
+
+↓
+
+Measurements
+
+Visit
+
+↓
+
+Treatments
+
+Order
+
+↓
+
+Products
+
+
+Detail rarely exists independently.
+
+Ownership is appropriate.
+
+---
+
+---
+
+# 4.5 Pattern 4 — Media Hub
+
+This pattern appears increasingly often.
+
+```text
+                Media
+
+      ↑      ↑      ↑
+
+ Artist  Genre  Studio
+
+      ↑      ↑      ↑
+
+ Mood  Language Playlist
+
+Media becomes the persistent center.
+
+Independent lookup tables become navigation dimensions.
+
+Suitable for
+
+music
+photography
+documents
+videos
+knowledge archives
+
+This pattern is especially effective with media_box.
+
+4.6 Pattern 5 — Knowledge Base
+
+Knowledge differs from transactions.
+
+Everything references everything.
+
+Articles
+
+↑
+
+Authors
+
+Tags
+
+Projects
+
+People
+
+Documents
+
+References
+
+Hierarchy becomes minimal.
+
+Relationships dominate.
+
+Examples
+
+Research library
+
+Corporate knowledge
+
+Personal wiki
+
+Scientific archive
+
+4.7 Pattern 6 — Taxonomy
+
+Classification itself becomes important.
+
+Animal
+
+↓
+
+Mammal
+
+↓
+
+Carnivore
+
+↓
+
+Canine
+
+↓
+
+Wolf
+
+or
+
+Kingdom
+
+↓
+
+Phylum
+
+↓
+
+Class
+
+↓
+
+Order
+
+↓
+
+Family
+
+↓
+
+Genus
+
+↓
+
+Species
+
+Each level owns the next.
+
+Navigation follows classification.
+
+4.8 Pattern 7 — Timeline
+
+Time becomes ownership.
+
+Year
+
+↓
+
+Month
+
+↓
+
+Day
+
+↓
+
+Events
+
+or
+
+Project
+
+↓
+
+Milestone
+
+↓
+
+Task
+
+Examples
+
+Diaries
+
+Construction
+
+Research
+
+Manufacturing
+
+4.9 Pattern 8 — Asset Registry
+
+Independent assets.
+
+Many references.
+
+Asset
+
+↑
+
+Owner
+
+Location
+
+Supplier
+
+Warranty
+
+Maintenance
+
+Category
+
+Examples
+
+Computers
+
+Vehicles
+
+Medical equipment
+
+Laboratory instruments
+
+Books
+
+4.10 Pattern 9 — Network
+
+Some domains contain almost no ownership.
+
+Everything references everything.
+
+Person
+
+↔ Person
+
+↔ Organization
+
+↔ Project
+
+↔ Event
+
+↔ Publication
+
+Examples
+
+Genealogy
+
+Social network
+
+Academic collaboration
+
+Professional contacts
+
+Hierarchy should remain minimal.
+
+4.11 Pattern 10 — Workspace
+
+Temporary work around persistent objects.
+
+Projects
+
+↓
+
+Tasks
+
+↓
+
+Documents
+
+↓
+
+Media
+
+References
+
+Employees
+
+Tags
+
+Priority
+
+Status
+
+Customers
+
+Common
+
+Project management
+
+Construction
+
+Software development
+
+Consulting
+
+4.12 Pattern Recognition
+
+The compiler should not memorize domains.
+
+It should recognize structure.
+
+Example
+
+Human
+
+I collect stamps.
+
+Compiler immediately notices
+
+Collection
+
+↓
+
+Stamp
+
+Reference
+
+Country
+
+Year
+
+Theme
+
+Condition
+
+Value
+
+Human
+
+I manage apartments.
+
+Compiler
+
+Owner
+
+↓
+
+Property
+
+↓
+
+Lease
+
+Reference
+
+Tenant
+
+Utility
+
+Contractor
+
+Invoice
+
+Pattern recognition is faster than domain analysis.
+
+4.13 Hybrid Architectures
+
+Real applications often combine patterns.
+
+Example
+
+Veterinary clinic
+
+Ownership
+
+Owner
+
+↓
+
+Pet
+
+↓
+
+Visit
+
+Reference
+
+Doctor
+
+Medicine
+
+Invoice
+
+Room
+
+Knowledge
+
+Medical Notes
+
+Media
+
+Attachments
+
+The compiler combines patterns.
+
+It does not invent new ones.
+
+4.14 Pattern Selection Rules
+
+Choose the simplest pattern that naturally represents reality.
+
+Do not force hierarchy.
+
+Do not force references.
+
+Reality decides.
+
+Hierarchy answers
+
+belongs to
+
+Reference answers
+
+associated with
+
+Timeline answers
+
+happened during
+
+Knowledge answers
+
+connected to
+
+4.15 Architectural Vocabulary
+
+By this point the compiler should recognize approximately ten architectural "words."
+
+Hierarchy
+
+Transaction
+
+Collection
+
+Timeline
+
+Taxonomy
+
+Knowledge
+
+Media Hub
+
+Asset Registry
+
+Workspace
+
+Network
+
+Complex applications become sentences built from these words.
+
+Example
+
+Music Archive
+
+Hierarchy
+
++
+
+Media Hub
+
+Veterinary Clinic
+
+Hierarchy
+
++
+
+Transaction
+
++
+
+Knowledge
+
+Research Laboratory
+
+Knowledge
+
++
+
+Timeline
+
++
+
+Media Hub
+
+Software Company
+
+Workspace
+
++
+
+Knowledge
+
++
+
+Transactions
+
+Architecture becomes composition rather than invention.
+
+4.16 Compiler Principle
+
+An experienced architect rarely invents new structures.
+
+Instead, they recognize familiar patterns within unfamiliar domains.
+
+The SpexWorx compiler should strive to do the same.
+
+End of Chapter 4
+(Author's note)
+
+This is where I think SpexWorx quietly departs from most RAD systems.
+
+Most RAD tools ask:
+
+"What controls do you want on the screen?"
+
+This guide now asks:
+
+"Which information architecture pattern describes the user's world?"
+
+That's a much higher level of abstraction.
+
+One editorial thought for later: I almost want to rename these "patterns" to Information Archetypes. "Pattern" is familiar from software engineering, but "archetype" emphasizes that they're recurring structures of information rather than implementation techniques. I'm not convinced yet, but it's a possibility worth considering as the manuscript evolves.
+
+Chapter 5
+Component Selection
+
+"Architecture describes the world. Components express that architecture."
+
+5.1 Introduction
+
+The previous chapters deliberately avoided discussing components.
+
+That separation is intentional.
+
+Architecture should never be influenced by implementation.
+
+A compiler must first understand what the user is describing.
+
+Only then should it decide how to represent it.
+
+Component selection is therefore not a creative activity.
+
+It is a mapping exercise.
+
+5.2 The Component Decision Tree
+
+Every persistent object eventually becomes one of a small number of component types.
+
+The compiler proceeds by asking a sequence of questions.
+
+Persistent Object
+        │
+        ▼
+Is it the application's entry point?
+        │
+     yes│no
+        ▼
+      Menu
+        │
+        ▼
+Does it belong to exactly one parent?
+        │
+     yes│no
+        ▼
+   table-1fk
+        │
+        ▼
+Does it participate in multiple independent relationships?
+        │
+     yes│no
+        ▼
+table-multi-fk
+        │
+        ▼
+Otherwise
+        │
+        ▼
+Standard Table
+
+Notice that no question mentions XML.
+
+The compiler reasons entirely in terms of information.
+
+5.3 Menu Components
+
+Menus are not data.
+
+Menus are navigation.
+
+They define the user's entry into an information space.
+
+Example
+
+Music Archive
+
+Main Menu
+
+↓
+
+Artists
+
+Media
+
+Genres
+
+Playlists
+
+Example
+
+Veterinary Clinic
+
+Main Menu
+
+↓
+
+Owners
+
+Pets
+
+Appointments
+
+Invoices
+
+A menu should answer one question:
+
+"Where would a first-time user naturally go?"
+
+Compiler rule
+
+Never create a menu because XML requires one.
+
+Create a menu because people require orientation.
+
+5.4 Standard Tables
+
+A standard table represents an independent collection of objects.
+
+Examples
+
+Countries
+
+Genres
+
+Languages
+
+Studios
+
+Currencies
+
+Departments
+
+Characteristics
+
+independent
+reusable
+no ownership
+frequently referenced
+
+These often become lookup tables.
+
+5.5 Hierarchical Tables (table-1fk)
+
+Hierarchy expresses ownership.
+
+The compiler should create a table-1fk only when ownership is genuine.
+
+Example
+
+Customer
+
+↓
+
+Orders
+
+Example
+
+Project
+
+↓
+
+Experiments
+
+Example
+
+Artist
+
+↓
+
+Albums
+
+Ownership implies
+
+navigation
+containment
+inherited context
+
+Compiler heuristic
+
+If users naturally say
+
+"inside"
+
+hierarchy is probably appropriate.
+
+5.6 Multi-FK Tables
+
+Many real-world objects participate in several independent dimensions.
+
+Example
+
+Song
+
+Artist
+
+Album
+
+Genre
+
+Studio
+
+Language
+
+Mood
+
+Producer
+
+None own the Song.
+
+Each simply describes it.
+
+A table-multi-fk allows the object to participate naturally in multiple navigation paths.
+
+Compiler rule
+
+Do not create Multi-FK because "many relationships exist."
+
+Create it because humans naturally search from many directions.
+
+5.7 Choosing Between Hierarchy and Multi-FK
+
+This decision deserves special attention.
+
+Example
+
+Albums
+
+↓
+
+Songs
+
+Natural.
+
+Genre
+
+↓
+
+Songs
+
+Usually incorrect.
+
+Genres classify.
+
+They do not own.
+
+Another example.
+
+Owner
+
+↓
+
+Pet
+
+Natural.
+
+Doctor
+
+↓
+
+Pet
+
+Incorrect.
+
+Doctors treat many pets.
+
+Pets see many doctors.
+
+Relationship, not ownership.
+
+Compiler checklist
+
+Ask
+
+If the parent disappears,
+
+should the child disappear?
+
+If yes,
+
+ownership.
+
+If no,
+
+reference.
+
+5.8 Rich Information Components
+
+Objects frequently contain more than structured fields.
+
+They require expressive content.
+
+The compiler chooses among several rich content components.
+
+text_box
+
+Best for
+
+descriptions
+documentation
+comments
+formatted notes
+coop_box
+
+Best for
+
+collaborative editing
+shared discussions
+continuously evolving content
+media_box
+
+Best for
+
+photographs
+PDFs
+drawings
+audio
+video
+voice notes
+OCR results
+transcriptions
+
+The compiler should treat media_box as a universal media container rather than a specialized widget.
+
+5.9 Smart Components
+
+Some components possess behavior beyond simple storage.
+
+The compiler should understand capabilities rather than implementation.
+
+Example
+
+media_box
+
+may
+
+store files
+preview content
+play audio
+display PDFs
+display images
+accept drag-and-drop
+transcribe speech
+retain original media
+expose metadata
+
+The application need not know how these functions are implemented.
+
+Only that they exist.
+
+5.10 Fields
+
+Once the component has been selected,
+
+field selection becomes straightforward.
+
+Typical field categories
+
+Identity
+
+Name
+
+Title
+
+Number
+
+Code
+
+Properties
+
+Date
+
+Quantity
+
+Price
+
+Duration
+
+Relationships
+
+Artist
+
+Owner
+
+Project
+
+Status
+
+Rich content
+
+Notes
+
+Media
+
+Discussion
+
+The compiler should avoid creating fields merely because databases allow them.
+
+Every field should support a user activity.
+
+5.11 Relationships
+
+Relationships should remain explicit.
+
+Example
+
+Media
+
+Artist
+
+Genre
+
+Studio
+
+Language
+
+Mood
+
+Producer
+
+Each relationship represents a distinct navigation path.
+
+The compiler should never merge unrelated concepts into a single field.
+
+5.12 Scripts
+
+Scripts extend behavior.
+
+They do not compensate for poor architecture.
+
+Suitable uses
+
+Import
+
+Export
+
+Metadata extraction
+
+Thumbnail generation
+
+Voice transcription
+
+Image analysis
+
+Notifications
+
+Synchronization
+
+Unsuitable uses
+
+Creating navigation
+
+Replacing hierarchy
+
+Correcting ownership
+
+Simulating relationships
+
+If a script becomes necessary because the information model is weak,
+
+improve the information model.
+
+5.13 Themes
+
+Themes affect presentation.
+
+Never architecture.
+
+Changing a theme should not alter
+
+persistence
+relationships
+navigation
+
+Only appearance.
+
+5.14 Component Minimalism
+
+The compiler should always prefer fewer components.
+
+Every additional table should justify its existence.
+
+Every additional relationship should improve navigation.
+
+Every additional field should support a meaningful task.
+
+Complexity is not capability.
+
+5.15 Component Independence
+
+Every component should have a clear purpose.
+
+Example
+
+Genres
+
+exist whether or not Songs exist.
+
+Songs
+
+exist whether or not Playlists exist.
+
+Playlists
+
+organize Songs.
+
+They do not own them.
+
+The compiler should preserve this independence.
+
+5.16 Example
+
+Wish
+
+I collect historical maps.
+
+Compiler
+
+Persistent objects
+
+Maps
+
+Countries
+
+Periods
+
+Cartographers
+
+Collections
+
+Ownership
+
+Collection
+
+↓
+
+Maps
+
+References
+
+Country
+
+Period
+
+Cartographer
+
+Components
+
+Menu
+
+table-1fk(Collection)
+
+table-multi-fk(Maps)
+
+Table(Country)
+
+Table(Period)
+
+Table(Cartographer)
+
+media_box(Map)
+
+text_box(Notes)
+
+Architecture now maps directly into AppML.
+
+5.17 Compiler Principle
+
+A component is never selected because it exists.
+
+A component is selected because it expresses a specific architectural role.
+
+Architecture determines components.
+
+Never the reverse.
+
+End of Chapter 5
+Author's Note
+
+I think we've quietly arrived at a three-layer architecture for SpexWorx:
+
+Human Intent
+        │
+        ▼
+Information Architecture
+        │
+        ▼
+Component Model
+        │
+        ▼
+AppML
+        │
+        ▼
+Runtime
+
+Your original guides tended to jump directly from architecture to AppML. By inserting the Component Model as an explicit layer, the compiler's reasoning becomes much clearer. It also means that if SpexWorx ever gains new components, the architectural reasoning doesn't change—only this mapping layer does.
+
+I have a feeling Chapters 6 and 7 (AppML and the language specification itself) are going to read almost like the XML specification for HTML5, because by then all the hard thinking has already been done. The syntax becomes almost inevitable.
+
+Chapter 6
+AppML — The Application Modeling Language
+
+"AppML is not a programming language. It is an architectural language."
+
+6.1 Purpose
+
+AppML exists for one purpose:
+
+To describe an information system in a form that can be compiled into a running application.
+
+AppML intentionally avoids describing algorithms.
+
+Instead it describes
+
+information
+navigation
+ownership
+relationships
+presentation
+behavior
+
+The runtime supplies implementation.
+
+6.2 Design Principles
+
+Every AppML document should satisfy five principles.
+
+Declarative
+
+AppML describes
+
+what exists
+
+never
+
+how it works
+
+Example
+
+<table name="Artists">
+
+Good.
+
+for(eachArtist)
+
+Impossible.
+
+Algorithms belong elsewhere.
+
+Deterministic
+
+The same AppML should always produce the same application.
+
+Compilation should never depend on execution order.
+
+Human-readable
+
+Architects should comfortably read AppML.
+
+Developers should comfortably review AppML.
+
+LLMs should comfortably generate AppML.
+
+Stable
+
+Small architectural changes should produce small XML changes.
+
+The compiler should not rewrite unrelated sections.
+
+Extensible
+
+New components should extend the language.
+
+They should not require redesigning the language.
+
+6.3 The Application
+
+Every document begins with exactly one application.
+
+<application
+    name="Music Archive"
+    user-port="8081"
+    dev-port="8082"
+    app-resources-path="..."/>
+
+The application defines
+
+identity
+runtime ports
+resource location
+global configuration
+
+Nothing more.
+
+6.4 Components
+
+Applications consist of components.
+
+Components are persistent architectural objects.
+
+Examples
+
+Menu
+
+Table
+
+table-1fk
+
+table-multi-fk
+
+Theme
+
+Script
+
+Help
+
+View
+
+Each component has
+
+identity
+properties
+behavior
+relationships
+6.5 Identity
+
+Every component possesses an id.
+
+Example
+
+id="artists"
+
+Identity never changes.
+
+Names may.
+
+Titles may.
+
+Presentation may.
+
+Identity remains stable.
+
+Compiler rule
+
+IDs should be meaningful.
+
+Avoid
+
+t14
+
+x6
+
+table33
+
+Prefer
+
+artists
+
+albums
+
+patients
+
+projects
+6.6 Navigation
+
+Navigation is explicit.
+
+Example
+
+<child href="#albums"/>
+
+This expresses ownership.
+
+Menus use
+
+<a href="#artists"/>
+
+This expresses entry points.
+
+References remain distinct.
+
+6.7 Layout
+
+Layout is descriptive.
+
+Not architectural.
+
+Changing
+
+grid="4,2"
+
+must never alter
+
+ownership
+persistence
+relationships
+
+Layout exists purely for presentation.
+
+6.8 Columns
+
+Columns describe properties.
+
+Every column should answer
+
+"What information is essential about this object?"
+
+Typical examples
+
+Name
+
+Title
+
+Date
+
+Number
+
+Price
+
+Description
+
+Status
+
+Columns should not encode relationships.
+
+Relationships belong elsewhere.
+
+6.9 Rich Columns
+
+Certain column types carry structured content.
+
+Examples
+
+text_box
+
+coop_box
+
+media_box
+
+These are semantic types.
+
+Not implementation details.
+
+text_box
+
+Long-form documentation.
+
+coop_box
+
+Shared editing.
+
+Versioned discussion.
+
+Collaborative notes.
+
+media_box
+
+Universal media container.
+
+The runtime may support
+
+image display
+PDF rendering
+audio playback
+video playback
+speech recognition
+OCR
+metadata extraction
+
+The compiler should rely only on published capabilities.
+
+Never implementation.
+
+6.10 Foreign Keys
+
+Relationships remain explicit.
+
+Example
+
+<fk
+    label="Genre"
+    source="#genres"/>
+
+Each FK represents
+
+one
+
+navigation dimension.
+
+Compiler rule
+
+Never overload relationships.
+
+Example
+
+Bad
+
+Artist / Producer / Composer
+
+Good
+
+Three independent FKs.
+
+6.11 Themes
+
+Themes belong to presentation.
+
+Never architecture.
+
+Compiler principle
+
+Applications remain identical after changing themes.
+
+Only appearance changes.
+
+6.12 Scripts
+
+Scripts extend behavior.
+
+They do not define architecture.
+
+Suitable responsibilities
+
+Import
+
+Export
+
+Synchronization
+
+AI assistance
+
+Media analysis
+
+Notifications
+
+Automation
+
+Unsuitable responsibilities
+
+Replacing hierarchy
+
+Creating ownership
+
+Repairing navigation
+
+Correcting references
+6.13 Validation
+
+Every AppML document should satisfy
+
+Exactly one application.
+
+Unique ids.
+
+Valid references.
+
+No cycles in ownership.
+
+Reachable navigation.
+
+Consistent layouts.
+
+Supported components.
+
+Valid column types.
+
+6.14 Compiler Responsibilities
+
+The compiler guarantees
+
+Architectural correctness.
+
+The runtime guarantees
+
+Operational correctness.
+
+Those responsibilities should remain separate.
+
+6.15 Runtime Responsibilities
+
+The runtime transforms AppML into
+
+Persistent storage.
+
+Editors.
+
+Navigation.
+
+Media handling.
+
+Synchronization.
+
+Rendering.
+
+Security.
+
+The runtime must not reinterpret architecture.
+
+Architecture has already been decided.
+
+6.16 Versioning
+
+Applications evolve.
+
+AppML should preserve identity whenever possible.
+
+Changing
+
+Artist Name
+
+to
+
+Display Name
+
+should not create a new object.
+
+Changing hierarchy
+
+may.
+
+The compiler should distinguish cosmetic changes from architectural ones.
+
+6.17 Compiler Principle
+
+AppML is not source code.
+
+It is the architectural specification from which a runtime constructs a working information system.
+
+The distinction is important.
+
+End of Chapter 6
+Author's Reflection
+
+Most language specifications define syntax first and meaning second.
+
+We've done the opposite.
+
+We defined:
+
+Intent
+Architecture
+Patterns
+Components
+Language
+
+Only then did we reach XML.
+
+I think that's actually the right order for SpexWorx. It teaches an agent that AppML is a consequence of architectural reasoning, not the starting point. If a future coding agent skipped XML entirely and first produced an ownership graph, a navigation graph, and a component model, I'd consider that a sign that this guide had done its job. The AppML generation would then be almost mechanical. That separation of concerns may turn out to be one of the strongest ideas in the specification.
+
+Chapter 7
+Validation and Self-Review
+
+"A compiler should never ask 'Did I generate XML?' It should ask 'Did I discover the user's world correctly?'"
+
+7.1 Introduction
+
+Compilation does not end when AppML has been generated.
+
+Generation is only the beginning of validation.
+
+A successful compilation satisfies four independent criteria.
+
+Human Intent
+
+↓
+
+Architecture
+
+↓
+
+Navigation
+
+↓
+
+AppML
+
+Failure in any layer produces a weaker application.
+
+The compiler must therefore validate each layer independently.
+
+7.2 The Four Validation Layers
+Intent
+
+↓
+
+Architecture
+
+↓
+
+Component Model
+
+↓
+
+AppML
+
+Each layer answers a different question.
+
+Intent
+
+Did we understand the user?
+
+Architecture
+
+Did we model reality?
+
+Components
+
+Did we choose appropriate representations?
+
+AppML
+
+Is the specification internally consistent?
+
+7.3 Intent Validation
+
+Before architecture is reviewed, the compiler asks
+
+Have I captured the user's actual objective?
+
+Example
+
+Human
+
+I organize family photographs.
+
+Wrong interpretation
+
+Photo Editor
+
+Correct interpretation
+
+Archive
+
+Search
+
+Browse
+
+Remember
+
+Share
+
+Notice
+
+Editing was never requested.
+
+Compiler questions
+
+What is the user trying to accomplish?
+
+What activities dominate?
+
+What activities are secondary?
+
+Which wishes remain unaddressed?
+
+7.4 Domain Validation
+
+The compiler verifies persistent objects.
+
+Checklist
+
+✓ Every important object discovered
+
+✓ No transient objects persisted
+
+✓ No missing domain concepts
+
+Example
+
+Music Archive
+
+Artists
+
+Albums
+
+Media
+
+Genres
+
+People
+
+Studios
+
+If
+
+Lyrics
+
+or
+
+Playlists
+
+were central to the wish,
+
+they should appear.
+
+7.5 Ownership Validation
+
+Hierarchy is the most common source of architectural mistakes.
+
+The compiler examines every parent-child relationship.
+
+Question
+
+Would the child naturally disappear if the parent disappeared?
+
+Example
+
+Customer
+
+↓
+
+Order
+
+Yes.
+
+Example
+
+Genre
+
+↓
+
+Song
+
+No.
+
+Genre classifies.
+
+It does not own.
+
+Compiler checklist
+
+Every hierarchy should express genuine ownership.
+
+7.6 Reference Validation
+
+Every FK should answer
+
+Why does this relationship exist?
+
+Bad
+
+Genre
+
+Producer
+
+Year
+
+Language
+
+Publisher
+
+Country
+
+Label
+
+...
+
+because
+
+"more is better."
+
+Good
+
+Every FK supports browsing.
+
+Every FK supports discovery.
+
+Every FK reflects reality.
+
+Question
+
+Would users search this way?
+
+If not,
+
+remove it.
+
+7.7 Navigation Validation
+
+This is perhaps the most important review.
+
+Imagine a new user entering the application.
+
+Without explanation,
+
+can they predict
+
+where information lives?
+
+Example
+
+Veterinary Clinic
+
+Owner
+
+↓
+
+Pet
+
+↓
+
+Visit
+
+Almost everyone understands it immediately.
+
+Example
+
+Room
+
+↓
+
+Visit
+
+↓
+
+Owner
+
+Confusing.
+
+Navigation should feel inevitable.
+
+Compiler rule
+
+If navigation requires documentation,
+
+the architecture should be reconsidered.
+
+7.8 Component Validation
+
+Every component should justify its existence.
+
+Question
+
+Why is this table here?
+
+If the answer is
+
+"because SQL needs it"
+
+remove it.
+
+Question
+
+Why is this hierarchy here?
+
+If the answer is
+
+"because it looked reasonable"
+
+reconsider it.
+
+Question
+
+Why is this script here?
+
+If the answer is
+
+"to compensate for navigation"
+
+improve architecture.
+
+7.9 Information Density
+
+Applications should remain understandable.
+
+Large applications often tempt architects to create unnecessary objects.
+
+Compiler heuristic
+
+Can two objects naturally become one?
+
+Can one object naturally become two?
+
+Prefer clarity over cleverness.
+
+7.10 Redundancy Detection
+
+The compiler searches for duplication.
+
+Example
+
+Author
+
+Writer
+
+Creator
+
+Perhaps
+
+one object.
+
+Example
+
+Album Year
+
+Song Year
+
+Perhaps
+
+shared reference.
+
+Example
+
+Genre
+
+Music Genre
+
+
+Likely duplication.
+
+7.11 Completeness
+
+The compiler asks
+
+Can every major user activity be completed?
+
+Wish
+
+I catalog books.
+
+Architecture
+
+Books
+
+Authors
+
+Missing
+
+Publishers?
+
+Subjects?
+
+Series?
+
+Perhaps.
+
+The compiler should compare architecture against intent.
+
+7.12 Consistency
+
+Naming
+
+Should follow one convention.
+
+Good
+
+Artist
+
+Album
+
+Media
+
+Genre
+
+Poor
+
+Artists
+
+Album
+
+tblMedia
+
+GenreLookup
+
+The compiler should generate a coherent vocabulary.
+
+7.13 Simplicity
+
+Architecture should be as simple as possible.
+
+Not simpler.
+
+Question
+
+Can a first-time user explain the application after five minutes?
+
+If yes,
+
+the architecture is probably healthy.
+
+7.14 The Architect's Walkthrough
+
+Before emitting AppML,
+
+the compiler mentally walks through the application.
+
+Example
+
+Music Archive
+
+"I want to find a song."
+
+↓
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Song
+
+Easy.
+
+Another.
+
+"I only remember the producer."
+
+↓
+
+People
+
+↓
+
+Producer
+
+↓
+
+Songs
+
+Possible.
+
+Another.
+
+"I remember the mood."
+
+↓
+
+Mood
+
+↓
+
+Songs
+
+Possible.
+
+Architecture succeeds.
+
+7.15 The Self-Critique
+
+Every compiler should criticize its own work.
+
+Questions
+
+What assumptions did I make?
+
+Which hierarchies might be wrong?
+
+Which references are speculative?
+
+Which objects deserve clarification?
+
+Good architects doubt themselves.
+
+7.16 When to Ask Questions
+
+The compiler should minimize interruptions.
+
+Never ask
+
+"What color should the menu be?"
+
+Ask
+
+only when uncertainty changes architecture.
+
+Examples
+
+Good
+
+"Can a patient have multiple owners?"
+
+Excellent question.
+
+Bad
+
+"What should the title of the menu be?"
+
+Minor detail.
+
+7.17 Validation Summary
+
+Compilation succeeds only if
+
+✓ Intent understood
+
+✓ Domain discovered
+
+✓ Ownership correct
+
+✓ References correct
+
+✓ Navigation natural
+
+✓ Components appropriate
+
+✓ AppML consistent
+
+Missing any one of these weakens the application.
+
+7.18 Compiler Principle
+
+The compiler's responsibility is not to produce XML.
+
+Its responsibility is to produce confidence.
+
+When the generated architecture feels inevitable,
+
+the compilation has succeeded.
+
+End of Chapter 7
+Author's Reflection
+
+I don't think this document should be called an Agent Guide anymore.
+
+I think we've accidentally written something larger.
+
+This is becoming a Language and Architecture Specification.
+
+An "Agent Guide" teaches how to use SpexWorx.
+
+This manuscript is teaching how to think in SpexWorx.
+
+Those are very different things.
+
+I suspect, by the time we finish, the title page may become:
+
+The SpexWorx Specification
+
+Architecture, AppML, and the Compilation of Human Intent
+
+I think that title better reflects what we're actually creating.
+
+Chapter 8
+Architectural Heuristics
+
+"Rules guarantee correctness. Heuristics guide judgment."
+
+8.1 Introduction
+
+No specification can anticipate every domain.
+
+The compiler must therefore employ heuristics.
+
+A heuristic is not a rule.
+
+A heuristic is a preference that has repeatedly proven useful across many applications.
+
+Rules should always be obeyed.
+
+Heuristics should be considered.
+
+The compiler should understand the difference.
+
+8.2 Rules versus Heuristics
+
+Example.
+
+Rule
+
+Every component shall have a unique identifier.
+
+Violation is an error.
+
+Heuristic
+
+Prefer shallow hierarchies over deep hierarchies.
+
+Violation is not necessarily wrong.
+
+It simply deserves justification.
+
+Compiler principle
+
+Never confuse architectural guidance with language constraints.
+
+8.3 Prefer Human Vocabulary
+
+People rarely say
+
+Entity
+
+They say
+
+Customer
+
+People rarely say
+
+Record
+
+They say
+
+Invoice
+
+Applications should therefore speak the language of their users.
+
+Compiler checklist
+
+Rename technical terms whenever a natural domain term exists.
+
+8.4 Prefer Ownership over Navigation Tricks
+
+If two objects genuinely possess an ownership relationship,
+
+express it explicitly.
+
+Never replace ownership with hyperlinks or scripts.
+
+Example
+
+Good
+
+Patient
+
+↓
+
+Visit
+
+Poor
+
+Patient
+
+→ Script
+
+→ Query
+
+→ Visits
+
+Architecture should remain visible.
+
+8.5 Prefer References over Duplication
+
+Example
+
+Bad
+
+Song
+
+Artist Name
+
+Producer Name
+
+Studio Name
+
+Good
+
+Song
+
+↓
+
+Artist
+
+Producer
+
+Studio
+
+The compiler should avoid embedding knowledge that naturally belongs elsewhere.
+
+8.6 Prefer Discovery over Search
+
+Search is useful.
+
+Discovery is more valuable.
+
+Suppose a user remembers
+
+"It was recorded in Nashville."
+
+A traditional application requires search.
+
+A navigable application allows
+
+Studios
+
+↓
+
+Nashville
+
+↓
+
+Songs
+
+The compiler should continuously ask
+
+Can this become navigation?
+
+8.7 Prefer Stable Objects
+
+Objects that change frequently make poor architectural anchors.
+
+Example
+
+Mood
+
+changes.
+
+Artist
+
+rarely changes.
+
+Use stable concepts as navigation roots.
+
+8.8 Prefer Shallow Hierarchies
+
+Hierarchy should reflect reality.
+
+Not ambition.
+
+Good
+
+Customer
+
+↓
+
+Order
+
+↓
+
+Item
+
+Questionable
+
+Company
+
+↓
+
+Division
+
+↓
+
+Department
+
+↓
+
+Section
+
+↓
+
+Team
+
+↓
+
+Employee
+
+↓
+
+Task
+
+↓
+
+Attachment
+
+Deep hierarchies become difficult to browse.
+
+Compiler heuristic
+
+More than four ownership levels deserves careful review.
+
+8.9 Prefer Independent Dimensions
+
+Suppose songs possess
+
+Genre
+
+Language
+
+Mood
+
+Producer
+
+Year
+
+These should remain independent.
+
+Avoid combining them.
+
+Bad
+
+Genre + Mood
+
+Good
+
+Separate navigation dimensions.
+
+8.10 Prefer Rich Objects
+
+Information increasingly includes media.
+
+Whenever appropriate,
+
+allow objects to accumulate
+
+Images
+
+PDFs
+
+Voice
+
+Video
+
+Notes
+
+Annotations
+
+The compiler should assume modern information is multimedia unless the domain clearly suggests otherwise.
+
+8.11 Prefer Explicit Relationships
+
+Hidden relationships confuse both humans and AI.
+
+Bad
+
+Status = "Completed by John"
+
+Good
+
+Status
+
+↓
+
+Completed
+
+Employee
+
+↓
+
+John
+
+Every important relationship deserves explicit representation.
+
+8.12 Prefer Evolution over Prediction
+
+Do not generate tables because
+
+"the user might need them later."
+
+Architecture should reflect today's understanding.
+
+Evolution is easier than speculation.
+
+8.13 Prefer Meaning over Symmetry
+
+Developers sometimes produce symmetrical architectures.
+
+Reality is rarely symmetrical.
+
+Example
+
+Customer
+
+↓
+
+Orders
+
+does not imply
+
+Orders
+
+↓
+
+Customer
+
+The compiler should follow semantics,
+
+not visual symmetry.
+
+8.14 Prefer Simplicity
+
+When two architectures both satisfy the wish,
+
+prefer the simpler one.
+
+Simplicity improves
+
+readability
+maintainability
+discoverability
+future evolution
+
+Complexity requires evidence.
+
+8.15 The "Morning Test"
+
+Imagine opening the application after six months.
+
+Without documentation,
+
+can you immediately remember
+
+where information lives?
+
+If yes,
+
+the architecture is probably healthy.
+
+8.16 The "New Employee Test"
+
+Suppose a new employee receives the application.
+
+After ten minutes,
+
+can they explain
+
+how information is organized?
+
+If yes,
+
+navigation is likely natural.
+
+8.17 The "Grandmother Test"
+
+Suppose an intelligent non-programmer describes the application.
+
+Would they say
+
+"Everything is where I expected."
+
+or
+
+"Why is that over there?"
+
+Architectures should minimize surprises.
+
+8.18 The "Graph Test"
+
+Draw the application as boxes and arrows.
+
+Remove every field.
+
+Remove every XML tag.
+
+Remove every implementation detail.
+
+Does the graph still make sense?
+
+If not,
+
+architecture depends too heavily on implementation.
+
+8.19 The "Conversation Test"
+
+Imagine two users discussing the application.
+
+One says
+
+"The invoice is under the customer."
+
+The other immediately understands.
+
+Good.
+
+If instead they say
+
+"Open the maintenance script, execute the filter, then..."
+
+architecture has failed.
+
+Good architectures naturally enter human conversation.
+
+8.20 The SpexWorx Heuristic
+
+When uncertain,
+
+ask a single question:
+
+If this application existed only as rooms connected by doors, would people still find everything naturally?
+
+If the answer is yes,
+
+the information architecture is probably correct.
+
+The runtime, AppML, and components merely build those rooms.
+
+End of Chapter 8
+Author's Reflection
+
+Most methodologies optimize for implementation.
+
+These heuristics optimize for human cognition.
+
+That's a subtle but profound distinction.
+
+I also noticed something else while writing. We haven't mentioned SQL, Java, HTML, REST, or XML in several pages—and yet the guidance has become more concrete rather than less. That suggests the heart of SpexWorx isn't its runtime or its language. It's the discipline of organizing information so that people can think with it.
+
+I think that is the real contribution this specification is converging on.
+
+Chapter 9
+Information Spaces
+
+"An application is not a collection of screens. It is a navigable information space."
+
+9.1 Introduction
+
+Traditional software often models applications as workflows.
+
+Login
+
+↓
+
+Search
+
+↓
+
+Edit
+
+↓
+
+Save
+
+↓
+
+Exit
+
+SpexWorx models applications differently.
+
+Applications are places.
+
+Users move through information much like people move through cities.
+
+They remember
+
+where things are
+how places relate
+what lies nearby
+
+Architecture therefore becomes spatial.
+
+9.2 The City Analogy
+
+Imagine entering an unfamiliar city.
+
+Nobody receives database documentation.
+
+Instead they naturally discover
+
+City
+
+↓
+
+Districts
+
+↓
+
+Streets
+
+↓
+
+Buildings
+
+↓
+
+Rooms
+
+After a short time they build an internal map.
+
+Applications should behave similarly.
+
+Users should gradually construct a mental model.
+
+Navigation should strengthen that model.
+
+Never fight it.
+
+9.3 Information Neighborhoods
+
+Related objects naturally form neighborhoods.
+
+Example
+
+Music
+
+Artists
+
+Albums
+
+Media
+
+Playlists
+
+Another
+
+Research
+
+Projects
+
+Experiments
+
+Observations
+
+Publications
+
+Another
+
+Hospital
+
+Patients
+
+Visits
+
+Treatments
+
+Invoices
+
+Neighborhoods reduce cognitive load.
+
+The compiler should attempt to preserve them.
+
+9.4 Landmarks
+
+Every information space contains landmarks.
+
+Landmarks are objects users repeatedly visit.
+
+Examples
+
+Dashboard
+
+Projects
+
+Customers
+
+Media
+
+Patients
+
+Landmarks deserve prominence.
+
+Menus should expose them naturally.
+
+9.5 Paths
+
+Users seldom jump randomly.
+
+Instead they follow familiar paths.
+
+Example
+
+Customer
+
+↓
+
+Orders
+
+↓
+
+Invoice
+
+Another
+
+Artist
+
+↓
+
+Album
+
+↓
+
+Song
+
+These paths become habits.
+
+Changing them unnecessarily confuses users.
+
+9.6 Crossroads
+
+Some objects connect many neighborhoods.
+
+Example
+
+Media
+
+Artist
+
+Album
+
+Genre
+
+Producer
+
+Mood
+
+Language
+
+Playlist
+
+Media becomes a crossroads.
+
+Many journeys converge there.
+
+The compiler should recognize crossroads because they often become Multi-FK components.
+
+9.7 Information Gravity
+
+Some objects naturally attract other objects.
+
+Patient attracts
+
+Visits
+
+Images
+
+Reports
+
+Invoices
+
+Vaccinations
+
+Project attracts
+
+Tasks
+
+Documents
+
+Meetings
+
+Media
+
+Experiments
+
+Gravity suggests ownership.
+
+Weak gravity suggests references.
+
+9.8 Visibility
+
+Important information should never hide behind unnecessary navigation.
+
+Frequently visited objects deserve shorter paths.
+
+Compiler heuristic
+
+Count clicks.
+
+If common activities require many navigation steps,
+
+reconsider the architecture.
+
+9.9 Orientation
+
+Users should rarely ask
+
+"Where am I?"
+
+Applications should continuously provide orientation.
+
+Hierarchy naturally accomplishes this.
+
+Example
+
+Owner
+
+↓
+
+Pet
+
+↓
+
+Visit
+
+↓
+
+Vaccination
+
+Every level provides context.
+
+9.10 Memory
+
+People remember locations remarkably well.
+
+They often forget names.
+
+Example
+
+"I don't remember the title."
+
+"But I remember it was inside the Jazz collection."
+
+Navigation supports memory.
+
+Search merely compensates for forgotten names.
+
+9.11 Exploration
+
+Good applications encourage exploration.
+
+A user viewing
+
+Producer
+
+might discover
+
+Songs
+
+Albums
+
+Studios
+
+without searching.
+
+Exploration often reveals information users never intended to seek.
+
+9.12 Information Density
+
+Neighborhoods should remain understandable.
+
+Imagine opening
+
+Media
+
+and seeing
+
+147 columns.
+
+Architecture has failed.
+
+Instead
+
+distribute information naturally across related objects.
+
+9.13 Connected Worlds
+
+Applications are rarely isolated.
+
+A veterinary clinic might contain
+
+Medical World
+
+Financial World
+
+Scheduling World
+
+Media World
+
+Rather than merging them,
+
+connect them.
+
+Separate neighborhoods.
+
+Shared references.
+
+Natural navigation.
+
+9.14 Navigation versus Search
+
+Search answers
+
+"Find exactly this."
+
+Navigation answers
+
+"Show me what's nearby."
+
+Humans use both.
+
+Architecture should support both.
+
+Search should enhance navigation,
+
+never replace it.
+
+9.15 Time
+
+Time deserves careful treatment.
+
+Sometimes
+
+Time is merely a property.
+
+Song
+
+↓
+
+Year
+
+Sometimes
+
+Time becomes architecture.
+
+Project
+
+↓
+
+Milestone
+
+↓
+
+Task
+
+The compiler must distinguish chronology from ownership.
+
+9.16 Multiple Perspectives
+
+The same information space may support several equally natural viewpoints.
+
+Music
+
+Artist
+
+↓
+
+Albums
+
+or
+
+Genre
+
+↓
+
+Artists
+
+or
+
+Mood
+
+↓
+
+Songs
+
+None are wrong.
+
+The compiler should identify the dominant perspective,
+
+then support alternative paths through references.
+
+9.17 Information Maps
+
+Every application should be drawable.
+
+Not as XML.
+
+As a map.
+
+Example
+
+          Artists
+
+             │
+
+Albums ─── Media ─── Genres
+
+             │
+
+         Playlists
+
+             │
+
+         Languages
+
+             │
+
+           Moods
+
+If the map feels intuitive,
+
+the architecture is probably healthy.
+
+9.18 Information Architecture versus User Interface
+
+The interface changes.
+
+The architecture should not.
+
+Different themes.
+
+Different layouts.
+
+Different devices.
+
+Same information space.
+
+The compiler models the world,
+
+not the screen.
+
+9.19 The SpexWorx World
+
+One can think of a SpexWorx application as a miniature world.
+
+Objects become places.
+
+Relationships become roads.
+
+Hierarchy becomes geography.
+
+Navigation becomes travel.
+
+AppML describes the map.
+
+The runtime constructs the city.
+
+Users simply explore.
+
+9.20 Compiler Principle
+
+The ultimate measure of an information space is not
+
+how quickly users learn it,
+
+but
+
+how rarely they become lost.
+
+An excellent application eventually disappears.
+
+Users no longer notice software.
+
+They simply know where everything lives.
+
+End of Chapter 9
+Author's Reflection
+
+People often compare software to machines:
+
+"input → process → output."
+
+SpexWorx is much closer to architecture.
+
+Architects don't ask:
+
+"Where should I put another button?"
+
+They ask:
+
+"How will people experience this place?"
+
+That shift—from machines to places—explains many of your design choices:
+
+why navigation comes before CRUD,
+why hierarchy matters,
+why the graph matters,
+why the media_box is a first-class citizen,
+why XML is merely a description of a world rather than a program.
+One suggestion for the finished book
+
+I would actually insert a full-page diagram immediately after this chapter. Not a UML diagram. Not an ER diagram.
+
+A beautiful conceptual illustration:
+
+                   HUMAN WISH
+                        │
+                        ▼
+            INFORMATION ARCHITECTURE
+                        │
+      ┌─────────────────┼─────────────────┐
+      ▼                 ▼                 ▼
+ Ownership         Relationships      Navigation
+      └─────────────────┼─────────────────┘
+                        ▼
+                INFORMATION SPACE
+                        │
+                        ▼
+                    COMPONENTS
+                        │
+                        ▼
+                      AppML
+                        │
+                        ▼
+                 RUNNING APPLICATION
+
+If someone remembered only one picture from the entire specification, I'd want it to be that one. I think it expresses, in a single page, what SpexWorx has been evolving toward over the last fifteen years.
+
+Chapter 10 — Why This Exists
+
+Not technology.
+
+Not XML.
+
+Not AppML.
+
+Just the motivation.
+
+Something along these lines:
+
+Humans naturally organize knowledge as interconnected places rather than isolated documents.
+
+Software has traditionally optimized for storage, processing, and transactions.
+
+SpexWorx instead optimizes for understanding.
+
+Every application is viewed as a navigable information space.
+
+Every information space can be described.
+
+Every description can be compiled.
+
+Therefore software development becomes the process of discovering and expressing an information architecture rather than constructing one by hand.
+
+I think that would make a fitting conclusion to the specification. It brings the reader full circle—from the user's first wish to a running application—and explains why the methodology exists in the first place.
+
